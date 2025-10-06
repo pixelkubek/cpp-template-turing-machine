@@ -87,14 +87,14 @@ namespace direction {
 template <typename Direction, typename Tape>
 struct move_header : std::conditional_t<
     std::is_same_v<Direction, direction::stay>,
-    header_stay_t<Tape>,
+    header_stay<Tape>,
         std::conditional_t<
             std::is_same_v<Direction, direction::go_left>,
-            header_left_t<Tape>,
+            header_left<Tape>,
             std::conditional_t<
                 std::is_same_v<Direction, direction::go_right>,
-                header_right_t<Tape>,
-                std::enable_if_t<false>
+                header_right<Tape>,
+                std::enable_if<false>
             >
         >
 > {};
