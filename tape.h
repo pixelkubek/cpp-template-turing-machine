@@ -53,4 +53,18 @@ using header_stay_t = typename header_stay<T>::type;
 
 static_assert(std::is_same_v<written_test_tape, header_stay_t<written_test_tape>>);
 
+template <typename T>
+struct header_right {};
+
+template <typename... Types1, typename T>
+struct header_right<tape<tape_fragment<Types1...>, T, tape_fragment<>>> : std::type_identity<tape<tape_fragment<Types1..., T>, blank, tape_fragment<>>> {};
+
+template <typename... Types1, typename T1, typename T2, typename... Types2>
+struct header_right<tape<tape_fragment<Types1...>, T1, tape_fragment<T2, Types2...>>> : std::type_identity<tape<tape_fragment<Types1..., T1>, T2, tape_fragment<Types2...>>> {};
+
+template <typename T>
+using header_right_t = typename header_right<T>::type;
+
+static_assert(std::is_same_v<header_right_t<tape<tape_fragment<int>, long, tape_fragment<double>>>, tape<tape_fragment<int, long>, double, tape_fragment<>>>);
+static_assert(std::is_same_v<header_right_t<tape<tape_fragment<int>, long, tape_fragment<>>>, tape<tape_fragment<int, long>, blank, tape_fragment<>>>);
 #endif
