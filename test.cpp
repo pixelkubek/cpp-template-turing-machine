@@ -1,15 +1,15 @@
 #include "machine.h"
 
-#define add_state(state_name)                                                  \
+#define ADD_STATE(state_name)                                                  \
     namespace state {                                                          \
         struct state_name {};                                                  \
     }
-#define add_tape_symbol(symbol_name)                                           \
+#define ADD_TAPE_SYMBOL(symbol_name)                                           \
     namespace tape_symbol {                                                    \
         struct symbol_name {};                                                 \
     }
 
-#define add_transition(from_state, from_symbol, to_state, to_symbol,           \
+#define ADD_TRANSITION(from_state, from_symbol, to_state, to_symbol,           \
                        to_direction)                                           \
     template <>                                                                \
     struct next_state<state::from_state, tape_symbol::from_symbol>             \
@@ -23,16 +23,21 @@
     struct chosen_direction<state::from_state, tape_symbol::from_symbol>       \
         : std::type_identity<direction::to_direction> {}
 
+#define RUN_WITH_TAPE(...)                                                     \
+    using namespace tape_symbol;                                               \
+    static_assert(                                                             \
+        compute<machine<state::start, new_tape_t<__VA_ARGS__>>>::value)
 
-add_state(moved_right);
-add_state(moved_back);
-add_tape_symbol(sym);
+#define RUN_EMPTY()                                                            \
+    static_assert(compute<machine<state::start, new_blank_tape_t>>::value)
 
-add_transition(start, blank, moved_right, sym, go_right);
-add_transition(moved_right, blank, moved_back, blank, go_left);
-add_transition(moved_back, sym, accept, blank, stay);
-add_transition(accept, blank, accept, blank, stay);
+ADD_STATE(moved_right);
+ADD_STATE(moved_back);
+ADD_TAPE_SYMBOL(sym);
 
-using my_machine = machine<state::start, new_blank_tape_t>;
+ADD_TRANSITION(start, blank, moved_right, sym, go_right);
+ADD_TRANSITION(moved_right, blank, moved_back, blank, go_left);
+ADD_TRANSITION(moved_back, sym, accept, blank, stay);
+ADD_TRANSITION(accept, blank, accept, blank, stay);
 
-static_assert(compute<my_machine>::value);
+RUN_EMPTY();
