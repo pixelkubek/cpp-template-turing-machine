@@ -77,4 +77,29 @@ using header_left_t = typename header_left<T>::type;
 
 static_assert(std::is_same_v<header_left_t<tape<tape_fragment<int>, long, tape_fragment<double>>>, tape<tape_fragment<>, int, tape_fragment<long, double>>>);
 static_assert(std::is_same_v<header_left_t<tape<tape_fragment<int>, long, tape_fragment<>>>, tape<tape_fragment<>, int, tape_fragment<long>>>);
+
+namespace direction {
+    struct stay {};
+    struct go_left {};
+    struct go_right {};
+};
+
+template <typename Direction, typename Tape>
+struct move_header : std::conditional_t<
+    std::is_same_v<Direction, direction::stay>,
+    header_stay_t<Tape>,
+        std::conditional_t<
+            std::is_same_v<Direction, direction::go_left>,
+            header_left_t<Tape>,
+            std::conditional_t<
+                std::is_same_v<Direction, direction::go_right>,
+                header_right_t<Tape>,
+                std::enable_if_t<false>
+            >
+        >
+> {};
+
+template <typename Direction, typename Tape>
+using move_header_t = typename move_header<Direction, Tape>::type;
+
 #endif

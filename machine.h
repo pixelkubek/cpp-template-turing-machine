@@ -4,16 +4,10 @@
 #include "tape.h"
 
 
-struct state {
+namespace state {
     struct start {};
     struct accept {};
     struct reject {};
-};
-
-struct direction {
-    struct stay {};
-    struct go_left {};
-    struct go_right {};
 };
 
 template <typename State, typename TapeContent>
