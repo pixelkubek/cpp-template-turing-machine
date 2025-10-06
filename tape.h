@@ -8,12 +8,6 @@ struct tape_fragment {};
 
 template <typename T1, typename T2, typename T3>
 struct tape {};
-// Valid tape tape<tape_fragment<Types1...>, T, tape_fragment<Types2...>>
-
-// template <typename... Types1, typename T, typename... Types2>
-// struct tape<tape_fragment<Types1...>, T, tape_fragment<Types2...>> {
-
-// };
 
 struct blank {};
 
