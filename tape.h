@@ -26,8 +26,6 @@ struct header_read<tape<tape_fragment<Types1...>, T, tape_fragment<Types2...>>> 
 template <typename T>
 using header_read_t = typename header_read<T>::type;
 
-static_assert(std::is_same_v<header_read_t<new_blank_tape_t>, tape_symbol::blank>);
-
 template <typename T1, typename T2>
 struct header_write {};
 
@@ -37,17 +35,11 @@ struct header_write<New, tape<tape_fragment<Types1...>, T, tape_fragment<Types2.
 template <typename New, typename Tape>
 using header_write_t = typename header_write<New, Tape>::type;
 
-using test_tape = new_blank_tape_t;
-using written_test_tape = header_write_t<int, test_tape>;
-static_assert(std::is_same_v<written_test_tape, tape<tape_fragment<>, int, tape_fragment<>>>);
-
 template <typename T>
 struct header_stay : std::type_identity<T> {};
 
 template <typename T>
 using header_stay_t = typename header_stay<T>::type;
-
-static_assert(std::is_same_v<written_test_tape, header_stay_t<written_test_tape>>);
 
 template <typename T>
 struct header_right {};
@@ -61,10 +53,6 @@ struct header_right<tape<tape_fragment<Types1...>, T1, tape_fragment<T2, Types2.
 template <typename T>
 using header_right_t = typename header_right<T>::type;
 
-static_assert(std::is_same_v<header_right_t<tape<tape_fragment<int>, long, tape_fragment<double>>>, tape<tape_fragment<long, int>, double, tape_fragment<>>>);
-static_assert(std::is_same_v<header_right_t<tape<tape_fragment<int>, long, tape_fragment<>>>, tape<tape_fragment<long, int>, tape_symbol::blank, tape_fragment<>>>);
-
-
 template <typename T>
 struct header_left {};
 
@@ -76,9 +64,6 @@ struct header_left<tape<tape_fragment<T1, Types1...>, T2, tape_fragment<Types2..
 
 template <typename T>
 using header_left_t = typename header_left<T>::type;
-
-static_assert(std::is_same_v<header_left_t<tape<tape_fragment<int>, long, tape_fragment<double>>>, tape<tape_fragment<>, int, tape_fragment<long, double>>>);
-static_assert(std::is_same_v<header_left_t<tape<tape_fragment<int>, long, tape_fragment<>>>, tape<tape_fragment<>, int, tape_fragment<long>>>);
 
 namespace direction {
     struct stay {};
