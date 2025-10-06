@@ -19,16 +19,6 @@ struct chosen_symbol {};
 template <typename State, typename TapeContent>
 struct chosen_direction {};
 
-// template <>
-// struct next_state<state::start, tape_symbol::blank> : std::type_identity<state::accept> {};
-
-// template <>
-// struct chosen_symbol<state::start, tape_symbol::blank> : std::type_identity<tape_symbol::blank> {};
-
-// template <>
-// struct chosen_direction<state::start, tape_symbol::blank> : std::type_identity<direction::go_right> {};
-
-
 template <typename State, typename TapeContent>
 using next_state_t = typename next_state<State, TapeContent>::type;
 
