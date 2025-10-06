@@ -45,4 +45,12 @@ using test_tape = new_tape_t;
 using written_test_tape = header_write_t<int, test_tape>;
 static_assert(std::is_same_v<written_test_tape, tape<tape_fragment<>, int, tape_fragment<>>>);
 
+template <typename T>
+struct header_stay : std::type_identity<T> {};
+
+template <typename T>
+using header_stay_t = typename header_stay<T>::type;
+
+static_assert(std::is_same_v<written_test_tape, header_stay_t<written_test_tape>>);
+
 #endif
