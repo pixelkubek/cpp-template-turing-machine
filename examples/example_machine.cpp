@@ -1,4 +1,4 @@
-#include "macros.h"
+#include "../macros.h"
 
 ADD_STATE(moved_right);
 ADD_STATE(moved_back);
@@ -12,4 +12,4 @@ ADD_TRANSITION(accept, blank, accept, blank, stay);
 ADD_TRANSITION(start, sym, reject, blank, stay);
 ADD_TRANSITION(reject, blank, reject, blank, stay);
 
-RUN_WITH_TAPE(sym);
+RUN_WITH_TAPE(blank);
