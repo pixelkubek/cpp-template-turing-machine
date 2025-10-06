@@ -107,10 +107,8 @@ using move_header_t = typename move_header<Direction, Tape>::type;
 
 template <typename... Types>
 struct new_tape : std::type_identity<
-    std::type_identity<
-        header_right_t<
-            tape<tape_fragment<>, tape_symbol::blank, tape_fragment<Types...>>
-        >
+    header_right_t<
+        tape<tape_fragment<>, tape_symbol::blank, tape_fragment<Types...>>
     >
 > {};
 

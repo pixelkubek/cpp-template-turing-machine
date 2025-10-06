@@ -40,4 +40,4 @@ ADD_TRANSITION(moved_right, blank, moved_back, blank, go_left);
 ADD_TRANSITION(moved_back, sym, accept, blank, stay);
 ADD_TRANSITION(accept, blank, accept, blank, stay);
 
-RUN_EMPTY();
+RUN_WITH_TAPE(blank);
