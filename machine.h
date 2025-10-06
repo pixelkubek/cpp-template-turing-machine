@@ -19,14 +19,14 @@ struct chosen_symbol {};
 template <typename State, typename TapeContent>
 struct chosen_direction {};
 
-template <>
-struct next_state<state::start, blank> : std::type_identity<state::accept> {};
+// template <>
+// struct next_state<state::start, tape_symbol::blank> : std::type_identity<state::accept> {};
 
-template <>
-struct chosen_symbol<state::start, blank> : std::type_identity<blank> {};
+// template <>
+// struct chosen_symbol<state::start, tape_symbol::blank> : std::type_identity<tape_symbol::blank> {};
 
-template <>
-struct chosen_direction<state::start, blank> : std::type_identity<direction::go_right> {};
+// template <>
+// struct chosen_direction<state::start, tape_symbol::blank> : std::type_identity<direction::go_right> {};
 
 
 template <typename State, typename TapeContent>
@@ -59,9 +59,25 @@ struct advance<machine<State, Tape>> : std::type_identity<machine<
     >
 >> {};
 
+template <typename T>
+using advance_t = typename advance<T>::type;
 
 using machine_instance = machine<state::start, new_tape_t>;
 // static_assert(move_header_t<direction::stay, new_tape_t>)
-static_assert(advance<machine_instance>::type)
+// static_assert(advance<machine_instance>::type);
+
+template <typename T>
+struct compute {};
+
+template <typename State, typename Tape>
+struct compute<machine<State, Tape>> : std::conditional_t<
+    std::is_same_v<State, state::accept>,
+    std::true_type,
+    std::conditional_t<
+        std::is_same_v<State, state::reject>,
+        std::false_type,
+        compute<advance_t<machine<State, Tape>>>
+    >
+> {};
 
 #endif

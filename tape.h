@@ -9,9 +9,11 @@ struct tape_fragment {};
 template <typename T1, typename T2, typename T3>
 struct tape {};
 
-struct blank {};
+namespace tape_symbol {
+    struct blank {};
+};
 
-struct new_tape : std::type_identity<tape<tape_fragment<>, blank, tape_fragment<>>> {};
+struct new_tape : std::type_identity<tape<tape_fragment<>, tape_symbol::blank, tape_fragment<>>> {};
 
 using new_tape_t = typename new_tape::type;
 
@@ -24,7 +26,7 @@ struct header_read<tape<tape_fragment<Types1...>, T, tape_fragment<Types2...>>> 
 template <typename T>
 using header_read_t = typename header_read<T>::type;
 
-static_assert(std::is_same_v<header_read_t<new_tape_t>, blank>);
+static_assert(std::is_same_v<header_read_t<new_tape_t>, tape_symbol::blank>);
 
 template <typename T1, typename T2>
 struct header_write {};
@@ -51,7 +53,7 @@ template <typename T>
 struct header_right {};
 
 template <typename... Types1, typename T>
-struct header_right<tape<tape_fragment<Types1...>, T, tape_fragment<>>> : std::type_identity<tape<tape_fragment<T, Types1...>, blank, tape_fragment<>>> {};
+struct header_right<tape<tape_fragment<Types1...>, T, tape_fragment<>>> : std::type_identity<tape<tape_fragment<T, Types1...>, tape_symbol::blank, tape_fragment<>>> {};
 
 template <typename... Types1, typename T1, typename T2, typename... Types2>
 struct header_right<tape<tape_fragment<Types1...>, T1, tape_fragment<T2, Types2...>>> : std::type_identity<tape<tape_fragment<T1, Types1...>, T2, tape_fragment<Types2...>>> {};
@@ -60,14 +62,14 @@ template <typename T>
 using header_right_t = typename header_right<T>::type;
 
 static_assert(std::is_same_v<header_right_t<tape<tape_fragment<int>, long, tape_fragment<double>>>, tape<tape_fragment<long, int>, double, tape_fragment<>>>);
-static_assert(std::is_same_v<header_right_t<tape<tape_fragment<int>, long, tape_fragment<>>>, tape<tape_fragment<long, int>, blank, tape_fragment<>>>);
+static_assert(std::is_same_v<header_right_t<tape<tape_fragment<int>, long, tape_fragment<>>>, tape<tape_fragment<long, int>, tape_symbol::blank, tape_fragment<>>>);
 
 
 template <typename T>
 struct header_left {};
 
 template < typename T, typename... Types1>
-struct header_left<tape<tape_fragment<>, T, tape_fragment<Types1...>>> : std::type_identity<tape<tape_fragment<>, blank, tape_fragment<T, Types1...>>> {};
+struct header_left<tape<tape_fragment<>, T, tape_fragment<Types1...>>> : std::type_identity<tape<tape_fragment<>, tape_symbol::blank, tape_fragment<T, Types1...>>> {};
 
 template <typename... Types1, typename T1, typename T2, typename... Types2>
 struct header_left<tape<tape_fragment<T1, Types1...>, T2, tape_fragment<Types2...>>> : std::type_identity<tape<tape_fragment<Types1...>, T1, tape_fragment<T2, Types2...>>> {};
