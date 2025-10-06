@@ -33,6 +33,6 @@ add_transition(moved_right, blank, moved_back, blank, go_left);
 add_transition(moved_back, sym, accept, blank, stay);
 add_transition(accept, blank, accept, blank, stay);
 
-using my_machine = machine<state::start, new_tape_t>;
+using my_machine = machine<state::start, new_blank_tape_t>;
 
 static_assert(compute<my_machine>::value);

@@ -13,9 +13,9 @@ namespace tape_symbol {
     struct blank {};
 };
 
-struct new_tape : std::type_identity<tape<tape_fragment<>, tape_symbol::blank, tape_fragment<>>> {};
+struct new_blank_tape : std::type_identity<tape<tape_fragment<>, tape_symbol::blank, tape_fragment<>>> {};
 
-using new_tape_t = typename new_tape::type;
+using new_blank_tape_t = typename new_blank_tape::type;
 
 template <typename T>
 struct header_read {};
@@ -26,7 +26,7 @@ struct header_read<tape<tape_fragment<Types1...>, T, tape_fragment<Types2...>>> 
 template <typename T>
 using header_read_t = typename header_read<T>::type;
 
-static_assert(std::is_same_v<header_read_t<new_tape_t>, tape_symbol::blank>);
+static_assert(std::is_same_v<header_read_t<new_blank_tape_t>, tape_symbol::blank>);
 
 template <typename T1, typename T2>
 struct header_write {};
@@ -37,7 +37,7 @@ struct header_write<New, tape<tape_fragment<Types1...>, T, tape_fragment<Types2.
 template <typename New, typename Tape>
 using header_write_t = typename header_write<New, Tape>::type;
 
-using test_tape = new_tape_t;
+using test_tape = new_blank_tape_t;
 using written_test_tape = header_write_t<int, test_tape>;
 static_assert(std::is_same_v<written_test_tape, tape<tape_fragment<>, int, tape_fragment<>>>);
 
@@ -103,5 +103,18 @@ struct move_header : std::conditional_t<
 
 template <typename Direction, typename Tape>
 using move_header_t = typename move_header<Direction, Tape>::type;
+
+
+template <typename... Types>
+struct new_tape : std::type_identity<
+    std::type_identity<
+        header_right_t<
+            tape<tape_fragment<>, tape_symbol::blank, tape_fragment<Types...>>
+        >
+    >
+> {};
+
+template <typename... Types>
+using new_tape_t = typename new_tape<Types...>::type;
 
 #endif

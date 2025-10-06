@@ -62,8 +62,8 @@ struct advance<machine<State, Tape>> : std::type_identity<machine<
 template <typename T>
 using advance_t = typename advance<T>::type;
 
-using machine_instance = machine<state::start, new_tape_t>;
-// static_assert(move_header_t<direction::stay, new_tape_t>)
+using machine_instance = machine<state::start, new_blank_tape_t>;
+// static_assert(move_header_t<direction::stay, new_blank_tape_t>)
 // static_assert(advance<machine_instance>::type);
 
 template <typename T>
