@@ -12,4 +12,4 @@ ADD_TRANSITION(accept, blank, accept, blank, stay);
 ADD_TRANSITION(start, sym, reject, blank, stay);
 ADD_TRANSITION(reject, blank, reject, blank, stay);
 
-RUN_WITH_TAPE(blank);
+RUN_WITH_TAPE(sym);
