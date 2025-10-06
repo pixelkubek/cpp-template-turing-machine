@@ -24,7 +24,7 @@ Add a transition to the machine, when the machine is in the state `from_state` a
 
 ```CPP
 RUN_WITH_TAPE(...);
-RUN_EMPTY()
+RUN_EMPTY();
 ```
 Set the initial tape content, or a blank tape respectively.
 In the first function, provide the initial tape contents with comma separated tape symbols (at least one).
